@@ -56,6 +56,49 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test "signup IP limit blocks account creation and email delivery until expiry" do
+    5.times do |index|
+      post users_url, params: signup_params("signup-#{index}@example.com")
+      assert_redirected_to account_activation_resend_path
+    end
+
+    assert_no_difference [ "User.count", "ActionMailer::Base.deliveries.size" ] do
+      post users_url, params: signup_params("signup-blocked@example.com")
+      assert_response :too_many_requests
+    end
+
+    get signup_path
+    assert_response :success
+
+    travel 16.minutes do
+      post users_url, params: signup_params("signup-blocked@example.com")
+      assert_redirected_to account_activation_resend_path
+    end
+  end
+
+  test "signup email limit normalizes email and applies across IP addresses" do
+    [ "limited@example.com", "LIMITED@example.com", " limited@example.com " ].each_with_index do |email, index|
+      post users_url,
+           params: { user: { name: "", email: email } },
+           headers: { "REMOTE_ADDR" => "192.0.2.#{index + 1}" }
+      assert_response :unprocessable_entity
+    end
+
+    assert_no_difference [ "User.count", "ActionMailer::Base.deliveries.size" ] do
+      post users_url,
+           params: signup_params("limited@example.com"),
+           headers: { "REMOTE_ADDR" => "192.0.2.4" }
+      assert_response :too_many_requests
+    end
+
+    travel 61.minutes do
+      post users_url,
+           params: signup_params("limited@example.com"),
+           headers: { "REMOTE_ADDR" => "192.0.2.4" }
+      assert_redirected_to account_activation_resend_path
+    end
+  end
+
   test "should edit user" do
     log_in_as(@user)
     get edit_user_path(@user)
@@ -117,4 +160,17 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
                                             admin:                 "true" } }
     assert_not @other_user.reload.admin?
   end
+
+  private
+
+    def signup_params(email)
+      {
+        user: {
+          name: "テストユーザー",
+          email: email,
+          password: "password",
+          password_confirmation: "password"
+        }
+      }
+    end
 end

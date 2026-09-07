@@ -1,4 +1,15 @@
 class UsersController < ApplicationController
+  rate_limit to: 5, within: 15.minutes,
+             by: -> { request.remote_ip },
+             with: :render_rate_limited,
+             only: :create,
+             name: "signup-ip"
+  rate_limit to: 3, within: 1.hour,
+             by: -> { rate_limit_key(params.dig(:user, :email)) },
+             with: :render_rate_limited,
+             only: :create,
+             name: "signup-email"
+
   before_action :logged_in_user, only: [ :show, :edit, :update ]
   before_action :correct_user,   only: [ :show, :edit, :update ]
   def new
