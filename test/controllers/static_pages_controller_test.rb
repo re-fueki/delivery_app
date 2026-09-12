@@ -35,5 +35,6 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "h1", text: "使い方"
     assert_select "a[href='#{towns_path}']", text: "町一覧を見る"
     assert_select "aside a[href='#{help_path}']", text: /ヘルプ/
+    assert_select "footer a[href='#{help_path}']", text: /Help/
   end
 end
