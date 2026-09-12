@@ -35,6 +35,11 @@
         お問い合わせ
       <% end %>
 
+      <%= link_to help_path do %>
+        <i class="fa-solid fa-circle-question"></i>
+        ヘルプ
+      <% end %>
+
       <%= link_to guest_login_path,
                   data: { turbo_method: :post } do %>
         <i class="fa-solid fa-user-gear" style="color: rgb(255, 212, 59);"></i>
