@@ -26,5 +26,15 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     get contact_path
     assert_response :success
     assert_select "a[href='#{new_contact_path}']", text: "メールを送る"
+    assert_select "a[href='#{help_path}']", text: "ヘルプを見る"
+  end
+
+  test "should get help" do
+    get help_path
+    assert_response :success
+    assert_select "h1", text: "使い方"
+    assert_select "a[href='#{towns_path}']", text: "町一覧を見る"
+    assert_select "aside a[href='#{help_path}']", text: /ヘルプ/
+    assert_select "footer a[href='#{help_path}']", text: /Help/
   end
 end

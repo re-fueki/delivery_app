@@ -1,0 +1,99 @@
+<% content_for :title, "ヘルプ | Delivery App" %>
+
+<section class="help-page">
+  <header class="help-hero">
+    <span class="help-hero-icon" aria-hidden="true">
+      <i class="fa-solid fa-circle-question"></i>
+    </span>
+    <div>
+      <p class="help-eyebrow">HELP</p>
+      <h1>使い方</h1>
+      <p>Catch-upで配達ルートを探す方法と、登録する方法をご案内します。</p>
+    </div>
+  </header>
+
+  <nav class="help-index" aria-label="ヘルプメニュー">
+    <a href="#find-route"><span>1</span>ルートを探す</a>
+    <a href="#check-route"><span>2</span>ルートを確認する</a>
+    <a href="#create-route"><span>3</span>ルートを登録する</a>
+  </nav>
+
+  <div class="help-sections">
+    <section class="help-card" id="find-route">
+      <div class="help-card-heading">
+        <span class="help-step">1</span>
+        <div>
+          <h2>ルートを探す</h2>
+          <p>町名または配達先の住所から検索できます。</p>
+        </div>
+      </div>
+
+      <div class="help-methods">
+        <div class="help-method">
+          <i class="fa-solid fa-flag" aria-hidden="true"></i>
+          <h3>町名から探す</h3>
+          <p>「町一覧」を開き、配達する町を選ぶと、その町に登録されているルートが表示されます。</p>
+        </div>
+        <div class="help-method">
+          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+          <h3>住所から探す</h3>
+          <p>ダッシュボードの「住所からルートを検索する」に配達先住所を入力すると、該当するルートを確認できます。</p>
+        </div>
+      </div>
+
+      <%= link_to towns_path, class: "help-action" do %>
+        町一覧を見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      <% end %>
+    </section>
+
+    <section class="help-card" id="check-route">
+      <div class="help-card-heading">
+        <span class="help-step">2</span>
+        <div>
+          <h2>ルートを確認する</h2>
+          <p>地図と地点リストで道順を確認します。</p>
+        </div>
+      </div>
+
+      <ol class="help-steps">
+        <li><span>1</span><p>町のルート一覧から、確認したいルート名を選びます。</p></li>
+        <li><span>2</span><p>地図上の経路と、サイドバーに表示される配達地点の順番を確認します。</p></li>
+        <li><span>3</span><p>「GoogleMapで確認する」を押すと、Google マップでルートを開けます。</p></li>
+      </ol>
+
+      <p class="help-note"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> 実際の道路状況や交通規制も確認し、安全を優先して走行してください。</p>
+    </section>
+
+    <section class="help-card" id="create-route">
+      <div class="help-card-heading">
+        <span class="help-step">3</span>
+        <div>
+          <h2>ルートを登録する</h2>
+          <p>ルートの登録にはログインが必要です。</p>
+        </div>
+      </div>
+
+      <ol class="help-steps">
+        <li><span>1</span><p>ログイン後、「町一覧」から登録先の町を選びます。</p></li>
+        <li><span>2</span><p>「新しいルートを登録する」を押し、ルート名や所要時間を入力します。</p></li>
+        <li><span>3</span><p>地図で配達地点を追加して順番を整え、「登録する」を押します。</p></li>
+      </ol>
+
+      <% unless logged_in? %>
+        <div class="help-actions">
+          <%= link_to "ログインする", login_path, class: "help-action" %>
+          <%= link_to "アカウントを作る", signup_path, class: "help-action help-action-secondary" %>
+        </div>
+      <% end %>
+    </section>
+  </div>
+
+  <section class="help-support">
+    <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+    <div>
+      <h2>解決しない場合</h2>
+      <p>不具合やご不明な点は、お問い合わせページからお知らせください。</p>
+    </div>
+    <%= link_to "お問い合わせ", contact_path, class: "help-action help-action-secondary" %>
+  </section>
+</section>
